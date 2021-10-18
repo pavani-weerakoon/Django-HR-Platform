@@ -11,16 +11,14 @@ from apps.common.services import generate_token, send_mail
 from apps.jobs.models import Job
 
 
-class Roles(models.TextChoices):
-    # User Roles
-    SUPER_ADMIN = 'SUPER_ADMIN', _('SUPER_ADMIN')
+class UserType(models.TextChoices):
+    CANDIDATE = 'CANDIDATE', _('CANDIDATE')
+    INTERVIEWER = 'INTERVIEWER', _('INTERVIEWER')
     ADMIN = 'ADMIN', _('ADMIN')
-    USER = 'USER', _('USER')
 
 
 class Company(SafeDeleteModel):
     name = models.BinaryField(max_length=100, null=True, blank=True)
-    logo = models.TextField(null=True, blank=True)
     owner = models.OneToOneField('users.User', on_delete=models.CASCADE,
                                  related_name='managing_company', null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -29,20 +27,13 @@ class Company(SafeDeleteModel):
 
 
 class User(AbstractUser, SafeDeleteModel):
-    CANDIDATE = 'CANDIDATE',
-    INTERVIEWER = 'INTERVIEW',
-    ADMIN = 'ADMIN',
-    USER_TYPE = [
-        (CANDIDATE, 'Candidate'),
-        (INTERVIEWER, 'Interviewer'),
-        (ADMIN, 'Admin'),
-    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     phone = models.CharField(max_length=15, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     user_type = models.CharField(
         max_length=50,
-        choices=USER_TYPE,
+        choices=UserType.choices,
     )
     company = models.ForeignKey(
         Company, related_name='company_user',
