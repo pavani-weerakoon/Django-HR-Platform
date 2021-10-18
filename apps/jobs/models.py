@@ -6,24 +6,6 @@ from apps.users.models import User, Company, Interviewer, Admin, Candidate
 # Create your models here.
 
 
-class User(AbstractUser):
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    first_name = models.CharField(
-        max_length=200,
-    )
-    last_name = models.CharField(
-        max_length=200,
-    )
-    email = models.EmailField(
-        max_length=200,
-        blank=True, null=True
-    )
-    contact_number = models.IntegerField(
-        null=True
-    )
-
-
 class Job(models.Model):
     role = models.CharField(
         max_length=200,
