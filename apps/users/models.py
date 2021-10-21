@@ -27,7 +27,6 @@ class Company(SafeDeleteModel):
 
 
 class User(AbstractUser, SafeDeleteModel):
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     phone = models.CharField(max_length=15, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
