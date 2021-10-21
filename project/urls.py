@@ -25,19 +25,24 @@ from rest_framework.routers import DefaultRouter
 
 from apps.files.views import FileViewSet
 from apps.users.views import AuthViewSet, UserViewSet
+from apps.jobs.views import JobViewSet
 
 router = DefaultRouter()
 router.register('auth', AuthViewSet, basename='auth')
 router.register('users', UserViewSet, basename='users')
 router.register('files', FileViewSet, basename='files')
+router.register('jobs', JobViewSet, basename='jobs')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
 
-    path('api/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/auth/token/', TokenObtainPairView.as_view(),
+         name='token_obtain_pair'),
+    path('api/auth/token/refresh/',
+         TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
