@@ -22,11 +22,13 @@ def create_user(validated_data):
 
 
 class AuthRegisterSerializer(serializers.ModelSerializer):
-    confirm_password = serializers.CharField(required=True, write_only=True, min_length=6)
+    confirm_password = serializers.CharField(
+        required=True, write_only=True, min_length=6)
 
     class Meta:
         model = get_user_model()
-        fields = ['id', 'first_name', 'last_name', 'email', 'password', 'confirm_password']
+        fields = ['id', 'first_name', 'last_name',
+                  'email', 'password', 'confirm_password']
         extra_kwargs = {
             'id': {'read_only': True},
             'first_name': {'required': True},
@@ -126,7 +128,8 @@ class UserResetPasswordSerializer(serializers.ModelSerializer):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         try:
-            self.user = get_object_or_404(get_user_model(), email=self.initial_data['email'])
+            self.user = get_object_or_404(
+                get_user_model(), email=self.initial_data['email'])
         except Http404:
             raise ValidationError(AccountErrorCodes.UNKNOWN_USER)
 

@@ -31,7 +31,7 @@ router = DefaultRouter()
 router.register('auth', AuthViewSet, basename='auth')
 router.register('users', UserViewSet, basename='users')
 router.register('files', FileViewSet, basename='files')
-router.register('jobs', JobViewSet, basename='jobs')
+# router.register('jobs', JobViewSet, basename='jobs')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

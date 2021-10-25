@@ -10,7 +10,7 @@ from django.db.models import Q
 from apps.users.permissions import AnonWriteOnly, NotAllowed
 from apps.users.serializers import AuthRegisterSerializer, UserSerializer, PasswordChangeSerializer, \
     ProfileUpdateSerializer, UserRequestResetPasswordSerializer, UserResetPasswordSerializer
-from apps.users.models import User, Roles
+from apps.users.models import User, UserType
 from apps.users.services import request_password_reset
 from project import settings
 
@@ -34,7 +34,8 @@ class AuthViewSet(ViewSet):
 
     @action(methods=['post'], detail=False, url_path='change-password')
     def change_password(self, request):
-        serializer = PasswordChangeSerializer(data=request.data, instance=request.user)
+        serializer = PasswordChangeSerializer(
+            data=request.data, instance=request.user)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         return Response()
@@ -79,7 +80,7 @@ class UserViewSet(ModelViewSet):
         instance.save()
 
     def filter_queryset(self, queryset):
-        return queryset.filter(Q(is_active=True) & ~Q(role=Roles.SUPER_ADMIN))
+        return queryset.filter(Q(is_active=True) & ~Q(role=UserType.ADMIN))
 
     @action(detail=False, methods=['get', 'put', 'patch'])
     def me(self, request):
@@ -87,7 +88,8 @@ class UserViewSet(ModelViewSet):
             serializer = UserSerializer(request.user)
             return Response(serializer.data)
         else:
-            serializer = ProfileUpdateSerializer(data=request.data, instance=request.user, partial=True)
+            serializer = ProfileUpdateSerializer(
+                data=request.data, instance=request.user, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
             return serializer.data

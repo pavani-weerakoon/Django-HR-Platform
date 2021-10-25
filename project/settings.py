@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY',
 DEBUG = int(os.environ.get("DEBUG", default=0)) == 0
 
 ALLOWED_HOSTS = ['localhost', 'apps.avantrio.xyz',
-                 os.environ.get('APP_HOST', '')]
+                 os.environ.get('APP_HOST', ''), '127.0.0.1']
 
 # Application definition
 

@@ -45,7 +45,7 @@ class Interview(models.Model):
         on_delete=models.CASCADE,
     )
     candidate = models.ForeignKey(
-        Interviewer, related_name='interviews',
+        Candidate, related_name='interviews',
         on_delete=models.CASCADE,
     )
 
