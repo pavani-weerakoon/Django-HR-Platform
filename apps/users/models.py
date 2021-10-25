@@ -26,7 +26,7 @@ class UserType(models.TextChoices):
 class Company(SafeDeleteModel):
     name = models.BinaryField(max_length=100, null=True, blank=True)
     owner = models.ForeignKey('users.User', on_delete=models.CASCADE,
-                              related_name='managing_company', null=True, blank=True)
+                              related_name='managing_company')
     created_date = models.DateTimeField(auto_now_add=True)
     location = models.CharField(max_length=200, null=True, blank=True)
     company_email = models.EmailField(max_length=200, blank=True, null=True)
