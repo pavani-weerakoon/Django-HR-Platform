@@ -8,16 +8,22 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.users.error_codes import AccountErrorCodes
-from apps.users.models import Company
+from apps.users.models import Company, User
 from project import settings
 
 
 def create_user(validated_data):
+    company = Company.objects.create()
     validated_data.pop('confirm_password')
     validated_data['username'] = validated_data['email']
     instance = get_user_model().objects.create(**validated_data)
+
     instance.set_password(validated_data['password'])
+    instance.company = company
     instance.save()
+    company.owner = instance
+    company.save()
+
     return instance
 
 
@@ -45,7 +51,9 @@ class AuthRegisterSerializer(serializers.ModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         try:
+
             user = create_user(validated_data)
+
             if settings.VERIFY_EMAIL:
                 user.is_active = False
                 user.save()

@@ -16,16 +16,9 @@ class UserType(models.TextChoices):
     ADMIN = 'ADMIN', _('ADMIN')
 
 
-# class Roles(models.TextChoices):
-#     # User Roles
-#     SUPER_ADMIN = 'SUPER_ADMIN', _('SUPER_ADMIN')
-#     ADMIN = 'ADMIN', _('ADMIN')
-#     USER = 'USER', _('USER')
-
-
 class Company(SafeDeleteModel):
     name = models.BinaryField(max_length=100, null=True, blank=True)
-    owner = models.ForeignKey('users.User', on_delete=models.CASCADE,
+    owner = models.ForeignKey('users.User', on_delete=models.CASCADE, blank=True, null=True,
                               related_name='managing_company')
     created_date = models.DateTimeField(auto_now_add=True)
     location = models.CharField(max_length=200, null=True, blank=True)
@@ -47,15 +40,6 @@ class User(AbstractUser, SafeDeleteModel):
     )
     phone = models.CharField(max_length=15, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
-
-    # def is_super_admin(self):
-    #     return self.role == Roles.SUPER_ADMIN or self.is_superuser
-
-    # def is_admin_user(self):
-    #     return self.role in [Roles.ADMIN, Roles.SUPER_ADMIN]
-
-    def is_admin(self):
-        return self.role == UserType.ADMIN or self.is_adminSuper
 
     def generate_email_verification_code(self):
         verification = self.email_verifications.create(code=generate_token(6))

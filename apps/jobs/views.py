@@ -13,8 +13,5 @@ class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
 
-
-def perform_create(self, serializer):
-
-    serializer.save(company=self.request.user.company)
-    print(self.request)
+    def perform_create(self, serializer):
+        serializer.save(company=self.request.user.company)

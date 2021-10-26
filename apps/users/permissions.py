@@ -40,15 +40,12 @@ class HasResourcePermission(BasePermission):
 
 class IsAdminUser(BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_admin()
+        return request.user.is_admin_user()
 
-# class IsAdminUser(BasePermission):
-#     def has_permission(self, request, view):
-#         return request.user.is_admin_user()
 
-# class IsSuperAdmin(BasePermission):
-#     def has_permission(self, request, view):
-#         return request.user.is_super_admin()
+class IsSuperAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_super_admin()
 
 
 class NotAllowed(BasePermission):
