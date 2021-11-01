@@ -17,7 +17,6 @@ def create_user(validated_data):
     validated_data.pop('confirm_password')
     validated_data['username'] = validated_data['email']
     instance = get_user_model().objects.create(**validated_data)
-
     instance.set_password(validated_data['password'])
     instance.company = company
     instance.save()
@@ -153,3 +152,9 @@ class UserResetPasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['new_password', 'confirm_new_password', 'token', 'email']
+
+
+# class candidateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Candidate
+#         fields = ['cv', 'jobs']

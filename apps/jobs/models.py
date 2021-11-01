@@ -18,11 +18,17 @@ class Job(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __str__(self):
+        return self.role
+
 
 class Section(models.Model):
     section_name = models.CharField(
         max_length=200,
     )
+
+    def __str__(self):
+        return self.pk
 
 
 class Question(models.Model):

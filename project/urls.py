@@ -24,14 +24,17 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
 from apps.files.views import FileViewSet
+from apps.users.models import Candidate
 from apps.users.views import AuthViewSet, UserViewSet
-from apps.jobs.views import JobViewSet
+from apps.jobs.views import JobViewSet, QuestionViewSet
 
 router = DefaultRouter()
 router.register('auth', AuthViewSet, basename='auth')
 router.register('users', UserViewSet, basename='users')
 router.register('files', FileViewSet, basename='files')
 router.register('jobs', JobViewSet, basename='jobs')
+router.register('questions', QuestionViewSet, basename='questions')
+# router.register('candidates', candidateViewSet, basename='candidates')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

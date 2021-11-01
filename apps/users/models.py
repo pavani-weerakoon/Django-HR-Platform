@@ -41,6 +41,15 @@ class User(AbstractUser, SafeDeleteModel):
     phone = models.CharField(max_length=15, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
+    def is_admin(self):
+        return self.user_type == UserType.ADMIN
+
+    def is_candidate(self):
+        return self.user_type == UserType.CANDIDATE
+
+    def is_interviewer(self):
+        return self.user_type == UserType.INTERVIEWER
+
     def generate_email_verification_code(self):
         verification = self.email_verifications.create(code=generate_token(6))
         send_mail(
