@@ -7,10 +7,11 @@ class JobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
-        fields = ['role', 'salary']
+        exclude = ['company']
 
 
 class QuestionSerializer(serializers.ModelSerializer):
+    section = serializers.CharField(read_only=True)
 
     class Meta:
         model = Question

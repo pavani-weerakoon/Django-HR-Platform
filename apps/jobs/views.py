@@ -9,7 +9,8 @@ from rest_framework import decorators
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from apps.jobs.service import get_question_for_job
-from apps.jobs.models import Section
+from apps.jobs.models import Section, Question
+import ast
 
 # Create your views here.
 
@@ -24,30 +25,43 @@ class JobViewSet(viewsets.ModelViewSet):
     @action(
         methods=['get', 'post'],
         detail=False,
-        url_name='question',
+        url_name='job_question',
         url_path='(?P<job_id>[^/.]+)/questions',
     )
     def job_question(self, request, job_id):
 
         if request.method == 'GET':
             job = get_object_or_404(Job, pk=job_id)
-            job_question = get_question_for_job(job)
-            serializer = QuestionSerializer(job_question, many=True)
+            job_questions = get_question_for_job(job)
+            print(job_questions)
+            serializer = QuestionSerializer(job_questions, many=True)
+            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         if request.method == 'POST':
+            job = get_object_or_404(Job, pk=job_id)
             job_request = request.data
+            # print(job_request)
+            # print(type(job_request))
             data_question = job_request['question_type']
             data_section = job_request['section']
-            section_serializer = SectionSerializer(data=data_section)
+            string_1 = {"section_name": data_section}
+            sec_dict = {}
+            sec_dict.update(string_1)
+            string_2 = {"question_type": data_question}
+            ques_dict = {}
+            ques_dict.update(string_2)
+            print(ques_dict)
+
+            section_serializer = SectionSerializer(data=sec_dict)
             if(section_serializer.is_valid(raise_exception=True)):
                 section_obj = section_serializer.save()
 
-            question_serializer = QuestionSerializer(data=data_question)
+            question_serializer = QuestionSerializer(data=ques_dict)
             if(question_serializer.is_valid(raise_exception=True)):
-                question_serializer.save(job=job_id, section=section_obj)
+                question_serializer.save(job=job, section=section_obj)
 
-            return Response(question_serializer.data, satus=status.HTTP_201_CREATED)
+            return Response(question_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

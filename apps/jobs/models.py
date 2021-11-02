@@ -28,7 +28,7 @@ class Section(models.Model):
     )
 
     def __str__(self):
-        return self.pk
+        return self.section_name
 
 
 class Question(models.Model):
