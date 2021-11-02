@@ -40,11 +40,8 @@ class JobViewSet(viewsets.ModelViewSet):
 
         if request.method == 'POST':
             job = get_object_or_404(Job, pk=job_id)
-            job_request = request.data
-            # print(job_request)
-            # print(type(job_request))
-            data_question = job_request['question_type']
-            data_section = job_request['section']
+            data_question = request.data['question_type']
+            data_section = request.data['section']
             string_1 = {"section_name": data_section}
             sec_dict = {}
             sec_dict.update(string_1)
