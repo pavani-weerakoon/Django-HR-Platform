@@ -37,13 +37,9 @@ class JobViewSet(viewsets.ModelViewSet):
         if request.method == 'POST':
             data_question = request.data['question_type']
             data_section = request.data['section']
-            string_1 = {"section_name": data_section}
-            sec_dict = {}
-            sec_dict.update(string_1)
-            string_2 = {"question_type": data_question}
-            ques_dict = {}
-            ques_dict.update(string_2)
-            print(ques_dict)
+
+            sec_dict = {"section_name": data_section}
+            ques_dict = {"question_type": data_question}
 
             section_serializer = SectionSerializer(data=sec_dict)
             if section_serializer.is_valid(raise_exception=True):
