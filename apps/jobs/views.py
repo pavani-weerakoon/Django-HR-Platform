@@ -28,15 +28,13 @@ class JobViewSet(viewsets.ModelViewSet):
         url_path='(?P<job_id>[^/.]+)/questions',
     )
     def job_question(self, request, job_id):
-
+        job = get_object_or_404(Job, pk=job_id)
         if request.method == 'GET':
-            job = get_object_or_404(Job, pk=job_id)
             job_questions = job.questions.all()
             serializer = QuestionSerializer(job_questions, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         if request.method == 'POST':
-            job = get_object_or_404(Job, pk=job_id)
             data_question = request.data['question_type']
             data_section = request.data['section']
             string_1 = {"section_name": data_section}
