@@ -8,7 +8,6 @@ from rest_framework import viewsets
 from rest_framework import decorators
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from apps.jobs.service import get_question_for_job
 from apps.jobs.models import Section, Question
 import ast
 
@@ -32,10 +31,8 @@ class JobViewSet(viewsets.ModelViewSet):
 
         if request.method == 'GET':
             job = get_object_or_404(Job, pk=job_id)
-            job_questions = get_question_for_job(job)
-            print(job_questions)
+            job_questions = job.questions.all()
             serializer = QuestionSerializer(job_questions, many=True)
-            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         if request.method == 'POST':
@@ -51,11 +48,11 @@ class JobViewSet(viewsets.ModelViewSet):
             print(ques_dict)
 
             section_serializer = SectionSerializer(data=sec_dict)
-            if(section_serializer.is_valid(raise_exception=True)):
+            if section_serializer.is_valid(raise_exception=True):
                 section_obj = section_serializer.save()
 
             question_serializer = QuestionSerializer(data=ques_dict)
-            if(question_serializer.is_valid(raise_exception=True)):
+            if question_serializer.is_valid(raise_exception=True):
                 question_serializer.save(job=job, section=section_obj)
 
             return Response(question_serializer.data, status=status.HTTP_201_CREATED)
