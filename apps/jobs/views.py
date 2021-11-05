@@ -38,25 +38,26 @@ class JobViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         if request.method == 'POST':
-            data_question = request.data['question_type']
-            print(type(data_question))
-            data_section = request.data['section']
-            sec_dict = {"section_name": data_section}
-            quesList = []
+            value = request.data
+            for dic in value:
+                data_question = dic['question_type']
+                data_section = dic['section']
+                sec_dict = {"section_name": data_section}
+                quesList = []
 
-            for x in data_question:
-                quesList.append({"question_type": x})
-            print(quesList)
+                for x in data_question:
+                    quesList.append({"question_type": x})
+                print(quesList)
 
-            section_serializer = SectionSerializer(data=sec_dict)
-            if section_serializer.is_valid(raise_exception=True):
-                section_obj = section_serializer.save()
+                section_serializer = SectionSerializer(data=sec_dict)
+                if section_serializer.is_valid(raise_exception=True):
+                    section_obj = section_serializer.save()
 
-            question_serializer = QuestionSerializer(
-                data=quesList, many=True)
+                question_serializer = QuestionSerializer(
+                    data=quesList, many=True)
 
-            if question_serializer.is_valid(raise_exception=True):
-                question_serializer.save(job=job, section=section_obj)
+                if question_serializer.is_valid(raise_exception=True):
+                    question_serializer.save(job=job, section=section_obj)
             return Response(question_serializer.data, status=status.HTTP_201_CREATED)
 
 
