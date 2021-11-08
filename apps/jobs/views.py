@@ -64,8 +64,9 @@ class JobViewSet(viewsets.ModelViewSet):
                     lists.append(quesList_obj)
 
             new_list = itertools.chain(*lists)
-
-            return Response((new_list), status=status.HTTP_201_CREATED)
+            question_serializer = QuestionSerializer(
+                new_list, many=True)
+            return Response(question_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
