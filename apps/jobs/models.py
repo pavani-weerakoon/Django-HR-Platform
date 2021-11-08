@@ -44,6 +44,9 @@ class Question(models.Model):
         on_delete=models.CASCADE,
     )
 
+    # def __str__(self):
+    #     return self.question_type
+
 
 class Interview(models.Model):
     interviewer = models.ForeignKey(

@@ -12,7 +12,6 @@ class JobSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     section = serializers.CharField(read_only=True)
-    # question_type = question_typeSerializer(many=True, required=False)
 
     class Meta:
         model = Question

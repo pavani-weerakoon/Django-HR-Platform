@@ -1,6 +1,7 @@
 from django.db.models import query
 from django.db.models.query import QuerySet
 from django.shortcuts import render
+from rest_framework.fields import flatten_choices_dict
 from apps.jobs.models import Job, Company, Question
 from apps.jobs.serializers import JobSerializer, QuestionSerializer, SectionSerializer
 from rest_framework.decorators import action
@@ -10,6 +11,7 @@ from rest_framework import decorators
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from apps.jobs.models import Question
+import itertools
 import ast
 
 # Create your views here.
@@ -38,6 +40,7 @@ class JobViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         if request.method == 'POST':
+            lists = []
             value = request.data
             for dic in value:
                 data_question = dic['question_type']
@@ -47,7 +50,6 @@ class JobViewSet(viewsets.ModelViewSet):
 
                 for x in data_question:
                     quesList.append({"question_type": x})
-                print(quesList)
 
                 section_serializer = SectionSerializer(data=sec_dict)
                 if section_serializer.is_valid(raise_exception=True):
@@ -57,8 +59,13 @@ class JobViewSet(viewsets.ModelViewSet):
                     data=quesList, many=True)
 
                 if question_serializer.is_valid(raise_exception=True):
-                    question_serializer.save(job=job, section=section_obj)
-            return Response(question_serializer.data, status=status.HTTP_201_CREATED)
+                    quesList_obj = question_serializer.save(
+                        job=job, section=section_obj)
+                    lists.append(quesList_obj)
+
+            new_list = itertools.chain(*lists)
+
+            return Response((new_list), status=status.HTTP_201_CREATED)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
