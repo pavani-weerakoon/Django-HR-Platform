@@ -101,6 +101,7 @@ class CandidateViewSet(viewsets.ViewSet):
     def create(self, request):
         candidate_user = User.objects.create(
             username=request.data['email'],
+            email=request.data['email'],
             company=request.user.company,
             user_type="CANDIDATE"
         )
@@ -110,8 +111,6 @@ class CandidateViewSet(viewsets.ViewSet):
         candidate = Candidate.objects.create(
             user=candidate_user
         )
-
         candidate.save()
         candidate_serializer = candidateSerializer(candidate)
-        print(candidate_serializer)
         return Response(candidate_serializer.data, status=status.HTTP_201_CREATED)

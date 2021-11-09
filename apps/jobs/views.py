@@ -33,11 +33,8 @@ class JobViewSet(viewsets.ModelViewSet):
     def job_question(self, request, job_id):
         job = get_object_or_404(Job, pk=job_id)
         if request.method == 'GET':
-            print(request.user)
             job_questions = job.questions.all()
-            print(type(job_questions))
             serializer = QuestionSerializer(job_questions, many=True)
-            print(type(serializer))
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         if request.method == 'POST':
