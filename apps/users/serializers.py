@@ -8,7 +8,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.users.error_codes import AccountErrorCodes
-from apps.users.models import Company, User
+from apps.users.models import Company, User, Admin, Candidate
 from project import settings
 
 
@@ -22,7 +22,10 @@ def create_user(validated_data):
     instance.save()
     company.owner = instance
     company.save()
-
+    Admin.objects.create(
+        admin_role="admin",
+        user=instance
+    )
     return instance
 
 
@@ -154,7 +157,8 @@ class UserResetPasswordSerializer(serializers.ModelSerializer):
         fields = ['new_password', 'confirm_new_password', 'token', 'email']
 
 
-# class candidateSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Candidate
-#         fields = ['cv', 'jobs']
+class candidateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Candidate
+        fields = ['jobs', 'user']

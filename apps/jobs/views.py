@@ -33,6 +33,7 @@ class JobViewSet(viewsets.ModelViewSet):
     def job_question(self, request, job_id):
         job = get_object_or_404(Job, pk=job_id)
         if request.method == 'GET':
+            print(request.user)
             job_questions = job.questions.all()
             print(type(job_questions))
             serializer = QuestionSerializer(job_questions, many=True)
@@ -66,6 +67,7 @@ class JobViewSet(viewsets.ModelViewSet):
             new_list = itertools.chain(*lists)
             question_serializer = QuestionSerializer(
                 new_list, many=True)
+
             return Response(question_serializer.data, status=status.HTTP_201_CREATED)
 
 
