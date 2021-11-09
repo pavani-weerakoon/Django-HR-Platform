@@ -161,4 +161,4 @@ class candidateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Candidate
-        fields = ['jobs', 'user']
+        fields = ['user']

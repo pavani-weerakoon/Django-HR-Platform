@@ -113,4 +113,10 @@ class CandidateViewSet(viewsets.ViewSet):
         )
         candidate.save()
         candidate_serializer = candidateSerializer(candidate)
+
         return Response(candidate_serializer.data, status=status.HTTP_201_CREATED)
+
+    def list(self, request):
+        queryset = Candidate.objects.all()
+        serializer = candidateSerializer(queryset, many=True)
+        return Response(serializer.data)
