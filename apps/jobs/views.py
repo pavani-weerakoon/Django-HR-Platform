@@ -57,9 +57,9 @@ class JobViewSet(viewsets.ModelViewSet):
                     data=ques_list, many=True)
 
                 if question_serializer.is_valid(raise_exception=True):
-                    ques_list_obj = question_serializer.save(
+                    ques = question_serializer.save(
                         job=job, section=sections)
-                    all_ques_list.append(ques_list_obj)
+                    all_ques_list.append(ques)
 
             flat_list = itertools.chain(*all_ques_list)
             question_serializer = QuestionSerializer(
