@@ -51,20 +51,19 @@ class JobViewSet(viewsets.ModelViewSet):
 
                 section_serializer = SectionSerializer(data=sec_dict)
                 if section_serializer.is_valid(raise_exception=True):
-                    section_obj = section_serializer.save()
+                    sections = section_serializer.save()
 
                 question_serializer = QuestionSerializer(
                     data=ques_list, many=True)
 
                 if question_serializer.is_valid(raise_exception=True):
-                    quesList_obj = question_serializer.save(
-                        job=job, section=section_obj)
-                    all_ques_list.append(quesList_obj)
+                    ques_list_obj = question_serializer.save(
+                        job=job, section=sections)
+                    all_ques_list.append(ques_list_obj)
 
             flat_list = itertools.chain(*all_ques_list)
             question_serializer = QuestionSerializer(
                 flat_list, many=True)
-
             return Response(question_serializer.data, status=status.HTTP_201_CREATED)
 
 
