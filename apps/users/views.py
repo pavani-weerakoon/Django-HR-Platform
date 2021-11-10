@@ -118,8 +118,9 @@ class CandidateViewSet(viewsets.ViewSet):
         return Response(candidate_serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
-        user_company = self.request.user.company.id
-
-        queryset = Candidate.objects.all()
-        serializer = CandidateSerializer(queryset, many=True)
-        return Response(serializer.data)
+        current_user = self.request.user
+        user = User.objects.filter(
+            company_id=current_user.company.id, user_type="CANDIDATE")
+        serializer = UserSerializer(user, many=True)
+        print(serializer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
