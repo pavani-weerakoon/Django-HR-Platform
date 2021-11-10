@@ -120,5 +120,4 @@ class CandidateViewSet(viewsets.ViewSet):
         candidate_user_list = User.objects.filter(
             company_id=request.user.company.id, user_type="CANDIDATE")
         serializer = UserSerializer(candidate_user_list, many=True)
-        print(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
