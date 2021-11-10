@@ -38,7 +38,7 @@ class JobViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         if request.method == 'POST':
-            lists = []
+            ques_list = []
             value = request.data
             for dic in value:
                 data_question = dic['question_type']
@@ -59,9 +59,9 @@ class JobViewSet(viewsets.ModelViewSet):
                 if question_serializer.is_valid(raise_exception=True):
                     quesList_obj = question_serializer.save(
                         job=job, section=section_obj)
-                    lists.append(quesList_obj)
+                    ques_list.append(quesList_obj)
 
-            new_list = itertools.chain(*lists)
+            new_list = itertools.chain(*ques_list)
             question_serializer = QuestionSerializer(
                 new_list, many=True)
 

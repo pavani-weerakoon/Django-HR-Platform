@@ -9,6 +9,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.users.error_codes import AccountErrorCodes
 from apps.users.models import Company, User, Admin, Candidate
+from apps.users.permissions import ReadOnly
 from project import settings
 
 
@@ -80,7 +81,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = [
-            'id', 'first_name', 'last_name', 'email', 'password', 'company', 'phone', 'role'
+            'id', 'first_name', 'last_name', 'email', 'password', 'company', 'phone'
         ]
 
     def create(self, validated_data):
@@ -157,7 +158,8 @@ class UserResetPasswordSerializer(serializers.ModelSerializer):
         fields = ['new_password', 'confirm_new_password', 'token', 'email']
 
 
-class candidateSerializer(serializers.ModelSerializer):
+class CandidateSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Candidate

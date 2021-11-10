@@ -9,7 +9,7 @@ from django.db.models import Q
 
 from apps.users.permissions import AnonWriteOnly, NotAllowed
 from apps.users.serializers import AuthRegisterSerializer, UserSerializer, PasswordChangeSerializer, \
-    ProfileUpdateSerializer, UserRequestResetPasswordSerializer, UserResetPasswordSerializer, candidateSerializer
+    ProfileUpdateSerializer, UserRequestResetPasswordSerializer, UserResetPasswordSerializer, CandidateSerializer
 from apps.users.models import User, UserType, Candidate
 from apps.users.services import request_password_reset
 from project import settings
@@ -112,11 +112,14 @@ class CandidateViewSet(viewsets.ViewSet):
             user=candidate_user
         )
         candidate.save()
-        candidate_serializer = candidateSerializer(candidate)
+        candidate_serializer = CandidateSerializer(
+            candidate)
 
         return Response(candidate_serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
+        user_company = self.request.user.company.id
+
         queryset = Candidate.objects.all()
-        serializer = candidateSerializer(queryset, many=True)
+        serializer = CandidateSerializer(queryset, many=True)
         return Response(serializer.data)
