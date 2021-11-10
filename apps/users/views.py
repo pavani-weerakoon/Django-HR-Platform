@@ -107,17 +107,13 @@ class CandidateViewSet(viewsets.ViewSet):
         )
         candidate_user.set_password("home")
         candidate_user.save()
-
-        candidate = Candidate.objects.create(
-            user=candidate_user
-        )
+        candidate = Candidate.objects.create(user=candidate_user)
         candidate.save()
-        candidate_serializer = CandidateSerializer(
-            candidate)
+        candidate_serializer = CandidateSerializer(candidate)
         return Response(candidate_serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
-        candidate_user_list = User.objects.filter(
-            company_id=request.user.company.id, user_type="CANDIDATE")
-        serializer = UserSerializer(candidate_user_list, many=True)
+        candidate_users = User.objects.filter(
+            company=request.user.company, user_type=UserType.CANDIDATE)
+        serializer = UserSerializer(candidate_users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
