@@ -64,9 +64,9 @@ class JobViewSet(viewsets.ModelViewSet):
             for sublist in all_questions:
                 for item in sublist:
                     flat_list.append(item)
-            question_serializer = QuestionSerializer(
+            serializer = QuestionSerializer(
                 flat_list, many=True)
-            return Response(question_serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
