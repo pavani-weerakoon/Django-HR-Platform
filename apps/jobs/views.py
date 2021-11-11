@@ -55,7 +55,6 @@ class JobViewSet(viewsets.ModelViewSet):
 
                 question_serializer = QuestionSerializer(
                     data=questions, many=True)
-
                 if question_serializer.is_valid(raise_exception=True):
                     ques = question_serializer.save(
                         job=job, section=sections)

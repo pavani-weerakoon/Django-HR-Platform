@@ -109,8 +109,8 @@ class CandidateViewSet(viewsets.ViewSet):
         candidate_user.save()
         candidate = Candidate.objects.create(user=candidate_user)
         candidate.save()
-        candidate_serializer = CandidateSerializer(candidate)
-        return Response(candidate_serializer.data, status=status.HTTP_201_CREATED)
+        serializer = CandidateSerializer(candidate)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
         candidate_users = User.objects.filter(
