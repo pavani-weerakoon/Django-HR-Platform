@@ -11,8 +11,10 @@ from rest_framework import decorators
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from apps.jobs.models import Question
-import itertools
+from apps.users.models import Candidate
 import ast
+
+from apps.users.serializers import CandidateSerializer
 
 # Create your views here.
 
@@ -67,6 +69,25 @@ class JobViewSet(viewsets.ModelViewSet):
             serializer = QuestionSerializer(
                 flat_list, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(
+        methods=['post', 'delete'],
+        detail=False,
+        url_name='job_candidate',
+        url_path='(?P<job_id>[^/.]+)/candidates',
+    )
+    def job_candidate(self, request, job_id):
+        job = get_object_or_404(Job, pk=job_id)
+        if request.method == 'POST':
+            candidate_id = request.data["candidate"]
+            candidate = Candidate.objects.get(id=candidate_id)
+            job.candidates.add(candidate)
+            serializer = CandidateSerializer(candidate)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        if request.method == 'delete':
+            candidate_id = request.data["candidate"]
+            candidate = Candidate.objects.get(id=candidate_id)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

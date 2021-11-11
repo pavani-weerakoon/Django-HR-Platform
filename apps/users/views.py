@@ -109,6 +109,7 @@ class CandidateViewSet(viewsets.ViewSet):
         candidate_user.save()
         candidate = Candidate.objects.create(user=candidate_user)
         candidate.save()
+
         serializer = CandidateSerializer(candidate)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
