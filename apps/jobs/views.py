@@ -61,7 +61,10 @@ class JobViewSet(viewsets.ModelViewSet):
                         job=job, section=sections)
                     all_questions.append(ques)
 
-            flat_list = itertools.chain(*all_questions)
+            flat_list = []
+            for sublist in all_questions:
+                for item in sublist:
+                    flat_list.append(item)
             question_serializer = QuestionSerializer(
                 flat_list, many=True)
             return Response(question_serializer.data, status=status.HTTP_201_CREATED)
