@@ -82,9 +82,7 @@ class JobViewSet(viewsets.ModelViewSet):
             candidate_id = request.data["candidate"]
             candidate = Candidate.objects.get(id=candidate_id)
             job.candidates.add(candidate)
-            serializer = CandidateSerializer(
-                job.candidates.filter())
-            print(job.candidates)
+            serializer = CandidateSerializer(candidate)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':

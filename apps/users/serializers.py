@@ -6,10 +6,12 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from apps.jobs.serializers import JobSerializer
 
 from apps.users.error_codes import AccountErrorCodes
-from apps.users.models import Company, User, Admin, Candidate
+from apps.users.models import Company, User, Admin, Candidate, UserType
 from apps.users.permissions import ReadOnly
+
 from project import settings
 
 
@@ -76,6 +78,7 @@ class CompanySerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     email = serializers.CharField(write_only=True)
+    user_type = serializers.CharField(read_only=True)
     company = CompanySerializer(required=False)
 
     class Meta:
@@ -160,7 +163,8 @@ class UserResetPasswordSerializer(serializers.ModelSerializer):
 
 class CandidateSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+    jobs = JobSerializer(read_only=True, many=True)
 
     class Meta:
         model = Candidate
-        fields = ['user']
+        fields = ['user', 'jobs']
