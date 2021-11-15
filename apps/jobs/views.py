@@ -79,25 +79,25 @@ class JobViewSet(viewsets.ModelViewSet):
     def job_candidate(self, request, job_id):
         job = get_object_or_404(Job, pk=job_id)
         if request.method == 'GET':
-            candidate_users = job.candidates.all()
-            can_users = []
-            for candidate_user in candidate_users:
-                can_users.append(candidate_user.user)
-            serializer = UserCandidateSerializer(can_users, many=True)
+            job_candidates = job.candidates.all()
+            candidate_users = []
+            for candidate in job_candidates:
+                candidate_users.append(candidate.user)
+            serializer = UserCandidateSerializer(candidate_users, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'POST':
-            candidates_id = request.data["candidate"]
-            can_users = []
-            all_candidates = []
-            for candidate_id in candidates_id:
+            candidate_ids = request.data["candidate"]
+            candidate_users = []
+            candidates = []
+            for candidate_id in candidate_ids:
                 candidate = Candidate.objects.get(id=candidate_id)
-                can_users.append(candidate)
+                candidates.append(candidate)
                 job.candidates.add(candidate)
 
-            for candidate in can_users:
-                all_candidates.append(candidate.user)
-            serializer = UserCandidateSerializer(all_candidates, many=True)
+            for candidate in candidates:
+                candidate_users.append(candidate.user)
+            serializer = UserCandidateSerializer(candidate_users, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':
