@@ -12,6 +12,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from apps.jobs.models import Question
 from apps.users.models import Candidate
+from apps.jobs.service import add_cantidate_to_job, add_questions
 import ast
 
 from apps.users.serializers import CandidateSerializer, UserCandidateSerializer
@@ -40,34 +41,9 @@ class JobViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         if request.method == 'POST':
-            all_questions = []
-
-            for dic in request.data:
-                data_question = dic['question_type']
-                data_section = dic['section']
-                sec_dict = {"section_name": data_section}
-                questions = []
-
-                for x in data_question:
-                    questions.append({"question_type": x})
-
-                section_serializer = SectionSerializer(data=sec_dict)
-                if section_serializer.is_valid(raise_exception=True):
-                    sections = section_serializer.save()
-
-                question_serializer = QuestionSerializer(
-                    data=questions, many=True)
-                if question_serializer.is_valid(raise_exception=True):
-                    ques = question_serializer.save(
-                        job=job, section=sections)
-                    all_questions.append(ques)
-
-            flat_list = []
-            for sublist in all_questions:
-                for item in sublist:
-                    flat_list.append(item)
+            questions = add_questions(request.data, job)
             serializer = QuestionSerializer(
-                flat_list, many=True)
+                questions, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(
@@ -88,15 +64,7 @@ class JobViewSet(viewsets.ModelViewSet):
 
         if request.method == 'POST':
             candidate_ids = request.data["candidate"]
-            candidate_users = []
-            candidates = []
-            for candidate_id in candidate_ids:
-                candidate = Candidate.objects.get(id=candidate_id)
-                candidates.append(candidate)
-                job.candidates.add(candidate)
-
-            for candidate in candidates:
-                candidate_users.append(candidate.user)
+            candidate_users = add_cantidate_to_job(candidate_ids, job)
             serializer = UserCandidateSerializer(candidate_users, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 

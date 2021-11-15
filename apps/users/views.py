@@ -11,7 +11,7 @@ from apps.users.permissions import AnonWriteOnly, NotAllowed
 from apps.users.serializers import AuthRegisterSerializer, UserSerializer, PasswordChangeSerializer, \
     ProfileUpdateSerializer, UserRequestResetPasswordSerializer, UserResetPasswordSerializer, CandidateSerializer
 from apps.users.models import User, UserType, Candidate
-from apps.users.services import request_password_reset
+from apps.users.services import request_password_reset, create_candidate_user
 from project import settings
 from rest_framework import viewsets
 
@@ -99,18 +99,8 @@ class UserViewSet(ModelViewSet):
 class CandidateViewSet(viewsets.ViewSet):
 
     def create(self, request):
-        candidate_user = User.objects.create(
-            username=request.data['email'],
-            email=request.data['email'],
-            company=request.user.company,
-            user_type="CANDIDATE"
-        )
-        candidate_user.set_password("home")
-        candidate_user.save()
-        candidate = Candidate.objects.create(user=candidate_user)
-        candidate.save()
-
-        serializer = CandidateSerializer(candidate)
+        candidate_user = create_candidate_user(request.data, request)
+        serializer = CandidateSerializer(candidate_user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
