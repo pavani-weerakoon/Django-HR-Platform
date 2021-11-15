@@ -87,10 +87,17 @@ class JobViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'POST':
-            candidate_id = request.data["candidate"]
-            candidate = Candidate.objects.get(id=candidate_id)
-            job.candidates.add(candidate)
-            serializer = UserCandidateSerializer(candidate.user)
+            candidates_id = request.data["candidate"]
+            can_users = []
+            all_candidates = []
+            for candidate_id in candidates_id:
+                candidate = Candidate.objects.get(id=candidate_id)
+                can_users.append(candidate)
+                job.candidates.add(candidate)
+
+            for candidate in can_users:
+                all_candidates.append(candidate.user)
+            serializer = UserCandidateSerializer(all_candidates, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':
