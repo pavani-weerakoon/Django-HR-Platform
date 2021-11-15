@@ -1,3 +1,4 @@
+
 import django.db.utils
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -56,9 +57,7 @@ class AuthRegisterSerializer(serializers.ModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         try:
-
             user = create_user(validated_data)
-
             if settings.VERIFY_EMAIL:
                 user.is_active = False
                 user.save()
@@ -75,11 +74,20 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserCandidateSerializer(serializers.ModelSerializer):
+    jobs = JobSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'company', 'user_type', 'jobs'
+        ]
+
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     email = serializers.CharField(write_only=True)
-    user_type = serializers.CharField(read_only=True)
-    company = CompanySerializer(required=False)
+    company = CompanySerializer(required=True)
 
     class Meta:
         model = get_user_model()
@@ -89,6 +97,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         try:
+
             return create_user(validated_data)
         except django.db.utils.IntegrityError:
             raise django.db.utils.IntegrityError(AccountErrorCodes.USER_EXIST)
@@ -167,4 +176,4 @@ class CandidateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Candidate
-        fields = ['user', 'jobs']
+        fields = ['id', 'user', 'jobs']

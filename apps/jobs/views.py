@@ -14,7 +14,7 @@ from apps.jobs.models import Question
 from apps.users.models import Candidate
 import ast
 
-from apps.users.serializers import CandidateSerializer
+from apps.users.serializers import CandidateSerializer, UserCandidateSerializer
 
 # Create your views here.
 
@@ -71,25 +71,33 @@ class JobViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(
-        methods=['post', 'delete'],
+        methods=['get', 'post', 'delete'],
         detail=False,
         url_name='job_candidate',
         url_path='(?P<job_id>[^/.]+)/candidates',
     )
     def job_candidate(self, request, job_id):
         job = get_object_or_404(Job, pk=job_id)
+        if request.method == 'GET':
+            candidate_users = job.candidates.all()
+            can_users = []
+            for candidate_user in candidate_users:
+                can_users.append(candidate_user.user)
+            serializer = UserCandidateSerializer(can_users, many=True)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         if request.method == 'POST':
             candidate_id = request.data["candidate"]
             candidate = Candidate.objects.get(id=candidate_id)
             job.candidates.add(candidate)
-            serializer = CandidateSerializer(candidate)
+            serializer = UserCandidateSerializer(candidate.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':
             candidate_id = request.data["candidate"]
             candidate = Candidate.objects.get(id=candidate_id)
             job.candidates.remove(candidate)
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

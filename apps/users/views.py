@@ -114,7 +114,10 @@ class CandidateViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
-        candidate_users = User.objects.filter(
+        user_candidates = User.objects.filter(
             company=request.user.company, user_type=UserType.CANDIDATE)
-        serializer = UserSerializer(candidate_users, many=True)
+        _user_candidates = []
+        for user_candidate in user_candidates:
+            _user_candidates.append(user_candidate.candidate)
+        serializer = CandidateSerializer(_user_candidates, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

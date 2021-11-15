@@ -95,7 +95,7 @@ class Candidate(models.Model):
 
     )
     user = models.OneToOneField(
-        User, related_name='candidates',
+        User, related_name='candidate',
         on_delete=models.CASCADE,
         max_length=200,
 
