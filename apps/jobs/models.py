@@ -61,15 +61,13 @@ class Interview(models.Model):
 
 class Experience(models.Model):
     role = models.CharField(
-        max_length=200,
+        max_length=200,  null=True, blank=True
     )
     worked_place = models.CharField(
-        max_length=100,
+        max_length=100,  null=True, blank=True
     )
-    time_period = models.CharField(
-        max_length=200,
-    )
-    Candidate = models.ForeignKey(
+
+    candidate = models.ForeignKey(
         Candidate, related_name='experiences',
         on_delete=models.CASCADE,
     )

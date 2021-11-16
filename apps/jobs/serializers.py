@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.jobs.models import Job, Question, Section
+from apps.jobs.models import Experience, Job, Question, Section
 from apps.users.models import Company
 
 

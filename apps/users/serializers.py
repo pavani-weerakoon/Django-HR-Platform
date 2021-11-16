@@ -12,7 +12,7 @@ from apps.jobs.serializers import JobSerializer
 from apps.users.error_codes import AccountErrorCodes
 from apps.users.models import Company, User, Admin, Candidate, UserType
 from apps.users.permissions import ReadOnly
-
+from apps.jobs.models import Experience
 from project import settings
 
 
@@ -177,3 +177,12 @@ class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = ['id', 'user', 'jobs']
+
+
+class ExperienceSerializer(serializers.ModelSerializer):
+    candidate = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Experience
+        fields = '__all__'
+        # exclude = ['candidate']

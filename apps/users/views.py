@@ -6,6 +6,8 @@ from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.db.models import Q
+from apps.jobs.models import Experience
+from apps.users.serializers import ExperienceSerializer
 
 from apps.users.permissions import AnonWriteOnly, NotAllowed
 from apps.users.serializers import AuthRegisterSerializer, UserSerializer, PasswordChangeSerializer, \
@@ -111,3 +113,34 @@ class CandidateViewSet(viewsets.ViewSet):
             _user_candidates.append(user_candidate.candidate)
         serializer = CandidateSerializer(_user_candidates, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(
+        methods=['get', 'post', 'delete'],
+        detail=False,
+        url_name='candidate_experience',
+        url_path='(?P<candidate_id>[^/.]+)/experiences',
+    )
+    def candidate_experience(self, request, candidate_id):
+        candidate = get_object_or_404(Candidate, pk=candidate_id)
+        print(candidate)
+        if request.method == 'GET':
+            candidate_experience = candidate.experiences.all()
+            serializer = ExperienceSerializer(candidate_experience, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        if request.method == 'POST':
+            serializer = ExperienceSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(candidate=candidate)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        if request.method == 'DELETE':
+            experience_id = request.data['experience_id']
+            experience = Experience.objects.get(id=experience_id)
+            experience.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ExperienceViewset(viewsets.ModelViewSet):
+    queryset = Experience.objects.all()
+    serializer_class = ExperienceSerializer
