@@ -83,12 +83,11 @@ class ExperienceSerializer(serializers.ModelSerializer):
 
 
 class CandidateExperienceSerializer(serializers.ModelSerializer):
-    jobs = JobSerializer(read_only=True, many=True)
     experiences = ExperienceSerializer(read_only=True, many=True)
 
     class Meta:
         model = Candidate
-        fields = ['id', 'user', 'experiences', 'jobs']
+        fields = ['id', 'user', 'experiences']
 
 
 class UserCandidateSerializer(serializers.ModelSerializer):
