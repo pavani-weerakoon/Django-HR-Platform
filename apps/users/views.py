@@ -111,7 +111,6 @@ class CandidateViewSet(viewsets.ViewSet):
         _user_candidates = []
         for user_candidate in user_candidates:
             _user_candidates.append(user_candidate.candidate)
-        print(_user_candidates)
 
         serializer = CandidateSerializer(_user_candidates, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -124,7 +123,7 @@ class CandidateViewSet(viewsets.ViewSet):
     )
     def candidate_experience(self, request, candidate_id):
         candidate = get_object_or_404(Candidate, pk=candidate_id)
-        print(candidate)
+
         if request.method == 'GET':
             candidate_experience = candidate.experiences.all()
             serializer = ExperienceSerializer(candidate_experience, many=True)
