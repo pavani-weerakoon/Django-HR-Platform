@@ -74,13 +74,23 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ExperienceSerializer(serializers.ModelSerializer):
+    candidate = serializers.SlugRelatedField(slug_field='id', read_only=True)
+
+    class Meta:
+        model = Experience
+        fields = '__all__'
+        # exclude = ['candidate']
+
+
 class UserCandidateSerializer(serializers.ModelSerializer):
     jobs = JobSerializer(read_only=True, many=True)
+    experiences = ExperienceSerializer(read_only=True)
 
     class Meta:
         model = User
         fields = [
-            'id', 'username', 'company', 'user_type', 'jobs'
+            'id', 'username', 'company', 'user_type', 'jobs', 'experiences'
         ]
 
 
@@ -173,15 +183,8 @@ class UserResetPasswordSerializer(serializers.ModelSerializer):
 class CandidateSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     jobs = JobSerializer(read_only=True, many=True)
+    experiences = ExperienceSerializer(read_only=True, many=True)
 
     class Meta:
         model = Candidate
-        fields = ['id', 'user', 'jobs']
-
-
-class ExperienceSerializer(serializers.ModelSerializer):
-    candidate = serializers.SlugRelatedField(slug_field='id', read_only=True)
-
-    class Meta:
-        model = Experience
-        fields = '__all__'
+        fields = ['id', 'user', 'jobs', 'experiences']
