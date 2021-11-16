@@ -80,17 +80,24 @@ class ExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Experience
         fields = '__all__'
-        # exclude = ['candidate']
+
+
+class CandidateExperienceSerializer(serializers.ModelSerializer):
+    jobs = JobSerializer(read_only=True, many=True)
+    experiences = ExperienceSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Candidate
+        fields = ['id', 'user', 'experiences', 'jobs']
 
 
 class UserCandidateSerializer(serializers.ModelSerializer):
-    jobs = JobSerializer(read_only=True, many=True)
-    experiences = ExperienceSerializer(read_only=True)
+    candidate = CandidateExperienceSerializer(read_only=True)
 
     class Meta:
         model = User
         fields = [
-            'id', 'username', 'company', 'user_type', 'jobs', 'experiences'
+            'id', 'username', 'company', 'user_type',  'candidate'
         ]
 
 
