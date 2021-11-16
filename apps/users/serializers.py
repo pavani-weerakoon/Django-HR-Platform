@@ -180,9 +180,8 @@ class CandidateSerializer(serializers.ModelSerializer):
 
 
 class ExperienceSerializer(serializers.ModelSerializer):
-    candidate = serializers.CharField(read_only=True)
+    candidate = serializers.SlugRelatedField(slug_field='id', read_only=True)
 
     class Meta:
         model = Experience
         fields = '__all__'
-        # exclude = ['candidate']
