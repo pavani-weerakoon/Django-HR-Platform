@@ -25,7 +25,7 @@ from rest_framework.routers import DefaultRouter
 
 from apps.files.views import FileViewSet
 from apps.users.models import Candidate
-from apps.users.views import AuthViewSet, UserViewSet, CandidateViewSet, ExperienceViewset
+from apps.users.views import AuthViewSet, UserViewSet, CandidateViewSet
 from apps.jobs.views import JobViewSet, QuestionViewSet
 
 router = DefaultRouter()
@@ -35,7 +35,7 @@ router.register('files', FileViewSet, basename='files')
 router.register('jobs', JobViewSet, basename='jobs')
 router.register('questions', QuestionViewSet, basename='questions')
 router.register('candidates', CandidateViewSet, basename='candidate')
-router.register('experiences', ExperienceViewset, basename='experiences')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -140,8 +140,3 @@ class CandidateViewSet(viewsets.ViewSet):
             experience = Experience.objects.get(id=experience_id)
             experience.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class ExperienceViewset(viewsets.ModelViewSet):
-    queryset = Experience.objects.all()
-    serializer_class = ExperienceSerializer
