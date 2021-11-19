@@ -91,8 +91,7 @@ class Candidate(models.Model):
         null=True, blank=True
     )
     jobs = models.ManyToManyField(
-        'jobs.Job', related_name='candidates'
-
+        'jobs.Job', related_name='candidates', through='jobs.Candidateship',
     )
     user = models.OneToOneField(
         User, related_name='candidate',

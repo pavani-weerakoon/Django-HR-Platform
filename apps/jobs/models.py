@@ -48,15 +48,24 @@ class Question(models.Model):
     #     return self.question_type
 
 
+class Candidateship(models.Model):
+    candidate = models.ForeignKey(
+        Candidate, related_name='interviews',
+        on_delete=models.CASCADE,
+    )
+    job = models.ForeignKey(
+        Job, related_name='interviews',
+        on_delete=models.CASCADE,
+    )
+
+
 class Interview(models.Model):
     interviewer = models.ForeignKey(
         Interviewer, related_name='interviews',
         on_delete=models.CASCADE,
     )
-    candidate = models.ForeignKey(
-        Candidate, related_name='interviews',
-        on_delete=models.CASCADE,
-    )
+    candidateship = models.ForeignKey(
+        Candidateship, related_name='interviews', on_delete=models.CASCADE, null=True)
 
 
 class Experience(models.Model):
