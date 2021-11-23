@@ -50,11 +50,11 @@ class Question(models.Model):
 
 class Candidateship(models.Model):
     candidate = models.ForeignKey(
-        Candidate, related_name='interviews',
+        Candidate, related_name='candidateship',
         on_delete=models.CASCADE,
     )
     job = models.ForeignKey(
-        Job, related_name='interviews',
+        Job, related_name='candidateship',
         on_delete=models.CASCADE,
     )
 
