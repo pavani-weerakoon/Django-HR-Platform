@@ -1,0 +1,65 @@
+[
+    {
+        "model": "users.company",
+        "pk": 1,
+        "fields": {
+            "name": "avantrio", 
+            "location": "colombo",
+            "company_email": "avantrio@gmail.com",
+            "created_date":"2021-11-09 04:43:45.188787",
+            "owner":91
+            
+            }
+    },
+    {
+        "model": "users.user",
+        "pk": 91,
+        "fields": {
+          "username":"ayesha@gmail12345.com",
+          "email":"ayesha@gmail12345.com",
+          "company":1,
+          "created_date":"2021-11-09 04:43:45.188787",
+          "password":"ayeshahome",
+          "user_type":"ADMIN"
+        }
+    } ,
+    {
+        "model": "users.user",
+        "pk": 92,
+        "fields": {
+          "username":"ayesha12@gmail12345.com",
+          "email":"ayesha12@gmail12345.com",
+          "company":1,
+          "created_date":"2021-11-09 04:43:45.188787",
+          "user_type":"CANDIDATE"
+        }
+    } ,
+    {
+        "model": "users.user",
+        "pk": 93,
+        "fields": {
+          "username":"shehan@gmail12345.com",
+          "email":"shehan@gmail12345.com",
+          "company":1,
+          "created_date":"2021-11-09 04:43:45.188787",
+          "user_type":"INTERVIEWER"
+        }
+    } ,
+    {
+        "model": "users.candidate",
+        "pk": 62,
+        "fields": {
+            "user":92
+            
+        }
+    },
+    {
+        "model": "users.Interviewer",
+        "pk": 1,
+        "fields": {
+            "role":"interviewer",
+            "user":92
+            
+        }
+    }    
+]

@@ -1,0 +1,65 @@
+[
+    {
+        "model":  "jobs.job", 
+        "pk": 37, 
+        "fields": {
+            "role": "SE", 
+            "salary": 90000,
+            "company":1 
+        }
+    },
+    {
+        "model":  "jobs.job", 
+        "pk": 38, 
+        "fields": {
+            "role": "QA", 
+            "salary": 90000,
+            "company":1 
+        }
+    },
+    {
+        
+        "model":  "jobs.section", 
+        "pk": 378, 
+        "fields": {
+            "section_name":"BA"
+        }
+    },
+    {
+        "model":  "jobs.question", 
+        "pk": 415, 
+        "fields": {
+            "question_type":"coding",
+            "job":37,
+            "section":378
+        }
+    },
+    {
+        "model":  "jobs.experience", 
+        "pk": 21, 
+        "fields": {
+            "role":"SE",
+            "worked_place":"codelabs",
+            "candidate":62
+        }
+    },
+    {
+        "model":  "jobs.candidateship", 
+        "pk": 12, 
+        "fields": {
+            "candidate":62,
+            "job":37
+            
+        }
+    },
+    {
+        "model":  "jobs.interview", 
+        "pk": 1, 
+        "fields": {
+            "interviewer":1,
+            "candidateship":12
+            
+        }
+    }
+
+]
