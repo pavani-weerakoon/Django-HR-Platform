@@ -5,9 +5,38 @@ from django.contrib import admin
 
 from .models import Question, Job, Section, Candidateship, Interview, Experience
 
-admin.site.register(Question)
-admin.site.register(Job)
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ['question_type', 'job', 'section']
+
+
+admin.site.register(Question, QuestionAdmin)
+
+
+class JobAdmin(admin.ModelAdmin):
+    list_display = ['role', 'salary', 'company_id']
+
+
+admin.site.register(Job, JobAdmin)
 admin.site.register(Section)
-admin.site.register(Candidateship)
-admin.site.register(Interview)
-admin.site.register(Experience)
+
+
+class CandidateshipAdmin(admin.ModelAdmin):
+    list_display = ['candidate_id', 'job']
+
+
+admin.site.register(Candidateship, CandidateshipAdmin)
+
+
+class InterviewAdmin(admin.ModelAdmin):
+    list_display = ['interviewer_id', 'candidateship_id']
+
+
+admin.site.register(Interview, InterviewAdmin)
+
+
+class ExperienceAdmin(admin.ModelAdmin):
+    list_display = ['role', 'worked_place', 'candidate_id']
+
+
+admin.site.register(Experience, ExperienceAdmin)
