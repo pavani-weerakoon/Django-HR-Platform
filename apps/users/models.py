@@ -87,9 +87,7 @@ class Admin(models.Model):
 
 
 class Candidate(models.Model):
-    cv = models.FilePathField(
-        null=True, blank=True
-    )
+
     jobs = models.ManyToManyField(
         'jobs.Job', related_name='candidates', through='jobs.Candidateship',
     )
