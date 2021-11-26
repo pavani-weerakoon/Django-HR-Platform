@@ -7,3 +7,4 @@ from .models import User, Company, Candidate, Interviewer
 admin.site.register(User)
 admin.site.register(Company)
 admin.site.register(Candidate)
+admin.site.register(Interviewer)
